@@ -6,7 +6,7 @@ namespace CoreAndFood.Data.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=(localdb)\\MSSQLLocalDB; database=CoreFoodDb; integrated security=true;");
+            optionsBuilder.UseSqlite("Data Source=mydatabase.db");
 
             base.OnConfiguring(optionsBuilder);
         }

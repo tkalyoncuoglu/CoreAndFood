@@ -1,50 +1,51 @@
 ﻿using CoreAndFood.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+
 
 namespace CoreAndFood.Controllers
 {    
     [AllowAnonymous]
 
     public class ChartController : Controller
-    { 
+    {
+        private List<Class1> class1s = new List<Class1>() {
+                                            new Class1(){
+                                                ProductName = "Computer",
+                                                    Stock = 150
+                                                },
+                                            new Class1()
+                                            {
+                                                ProductName = "Lcd",
+                                                    Stock = 75
+                                                },
+                                            new Class1()
+                                            {
+                                                ProductName = "Usb Disk",
+                                                    Stock = 220
+                                                }};
         public IActionResult Index()
         {
-            return View();
+           
+            ViewData["data"] = JsonSerializer.Serialize(class1s);
+            ViewData["chartTitle"] = "Ürün - Stok Grafiği";
+            ViewData["chartType"] = "PieChart";
+
+
+            return View("index");
         }
   
         public IActionResult Index2()
         {
-            return View();
+            ViewData["data"] = JsonSerializer.Serialize(class1s);
+            ViewData["chartTitle"] = "Ürün - Stok Grafiği";
+            ViewData["chartType"] = "ColumnChart";
+
+            return View("index");
         }
 
-        public IActionResult VisualizeProductResult()
-        {
-            return Json(ProductList());
-        }
-
-        public List<Class1> ProductList()
-        {
-            List<Class1> class1s = new List<Class1>();
-            class1s.Add(new Class1()
-            {
-                ProductName = "Computer",
-                Stock = 150
-            });
-            class1s.Add(new Class1()
-            {
-                ProductName = "Lcd",
-                Stock = 75
-            });
-            class1s.Add(new Class1()
-            {
-                ProductName = "Usb Disk",
-                Stock = 220
-            });
-
-            return class1s;
-        }
-
+        
      
         public IActionResult Index3()
         {
