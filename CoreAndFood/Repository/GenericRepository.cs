@@ -4,46 +4,52 @@ using System.Linq.Expressions;
 
 namespace CoreAndFood.Repository
 {
-    public class GenericRepository<T> where T : class,  new()
+    public class GenericRepository<T> where T : class, new()
     {
-        Context c = new Context();
+        private CoreAndFoodContext _context;
 
-        public List<T> TList()
+        public GenericRepository(CoreAndFoodContext context)
         {
-            return c.Set<T>().ToList();
+            _context = context;
+        }
+  
+
+        public List<T> Get()
+        {
+            return _context.Set<T>().ToList();
         }
 
-        public void TAdd(T t)
+        public void Add(T t)
         {
-            c.Set<T>().Add(t);
-            c.SaveChanges();
+            _context.Set<T>().Add(t);
+            _context.SaveChanges();
         }
 
-        public void TDelete(T t)
+        public void Delete(T t)
         {
-            c.Set<T>().Remove(t);
-            c.SaveChanges();
+            _context.Set<T>().Remove(t);
+            _context.SaveChanges();
         }
 
-        public void TUpdate(T t)
+        public void Update(T t)
         {
-            c.Set<T>().Update(t);
-            c.SaveChanges();
+            _context.Set<T>().Update(t);
+            _context.SaveChanges();
         }
 
-        public T TGetList(int id)
+        public T Get(int id)
         {
-           return c.Set<T>().Find(id);
+           return _context.Set<T>().Find(id);
         }
 
-        public List<T> TList(string p)
+        public List<T> Get(string p)
         {
-            return c.Set<T>().Include(p).ToList();
+            return _context.Set<T>().Include(p).ToList();
         }
 
-        public List<T> List(Expression<Func<T, bool>> filter)
+        public List<T> Get(Expression<Func<T, bool>> filter)
         {
-            return c.Set<T>().Where(filter).ToList();
+            return _context.Set<T>().Where(filter).ToList();
         }
     }
 }

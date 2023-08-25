@@ -1,3 +1,6 @@
+using CoreAndFood.Data.Models;
+using CoreAndFood.Repository;
+using CoreAndFood.ViewComponents;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -23,6 +26,11 @@ var policy = new AuthorizationPolicyBuilder()
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
+builder.Services.AddScoped<CoreAndFoodContext>();
+builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<ProductRepository>();
+
+
 
 var app = builder.Build();
 
@@ -46,8 +54,11 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+
 app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Category}/{action=Index}/{id?}");
+
+
 
 app.Run();

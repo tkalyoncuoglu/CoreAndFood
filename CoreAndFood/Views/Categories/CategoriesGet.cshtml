@@ -9,12 +9,12 @@
 <br />
 @using (Html.BeginForm("CategoriesUpdate", "Categories", FormMethod.Post))
 {
-    @Html.LabelFor(x=>x.CategoryId)
-    @Html.TextBoxFor(x=>x.CategoryId, new { @class = "form-control" })
+    @Html.LabelFor(x=>x.Id)
+    @Html.TextBoxFor(x=>x.Id, new { @class = "form-control" })
     <br />
-    @Html.LabelFor(x=>x.CategoryName)
-    @Html.TextBoxFor(x=>x.CategoryName, new { @class = "form-control" })
-    @Html.ValidationMessageFor(x=>x.CategoryName,"",new { @style = "color: red" })
+    @Html.LabelFor(x=>x.Name)
+    @Html.TextBoxFor(x=>x.Name, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x=>x.Name,"",new { @style = "color: red" })
     ;
     <br />
     @Html.LabelFor(x=>x.Description)

@@ -1,4 +1,4 @@
-﻿
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
 }
@@ -48,9 +48,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <body>
 	
-
 	<script>
 		$(document).ready(function () {
+			var element = $(".agileits_header");
+			if (element.length == 0)
+				return;
 			var navoffeset = $(".agileits_header").offset().top;
 			$(window).scroll(function () {
 				var scrollpos = $(window).scrollTop();
@@ -67,14 +69,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="logo_products">
 		<div class="container">
 			<div class="w3ls_logo_products_left">
-				<h1><a href="index.html"><span> Lezzetli </span> Gıdalar </a></h1>
+				<h1><a asp-controller="Default" asp-action="Index"><span> Lezzetli </span> Gıdalar </a></h1>
 			</div>
 			<div class="w3ls_logo_products_left1">
 				<ul class="special_items">
-					<li><a href="events.html">Ana Sayfa</a><i>/</i></li>
-					<li><a href="about.html">Hakkımızda</a><i>/</i></li>
-					<li><a href="products.html">Lezzetli Tarifler</a><i>/</i></li>
-					<li><a href="/Login/Index/">Yönetim Paneli</a></li>
+					<li><a asp-controller="Default" asp-action="Index">Ana Sayfa</a><i>/</i></li>
+					<li><a asp-controller="Default" asp-action="Index">Hakkımızda</a><i>/</i></li>
+					<li><a asp-controller="Default" asp-action="Index">Lezzetli Tarifler</a><i>/</i></li>
+					<li><a asp-controller="Login" asp-action="Index">Yönetim Paneli</a></li>
 				</ul>
 			</div>
 			<div class="w3ls_logo_products_left1">
@@ -85,6 +87,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 			<div class="clearfix"> </div>
 		</div>
+	</div>
 	</div>
 	<!-- //header -->
 	<!-- banner -->
@@ -159,7 +162,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			
 			<h3>Ürünlerimiz</h3>
-			@await Component.InvokeAsync("FoodListByCategory", new {id = ViewBag.x})
+			@await Component.InvokeAsync("ProductListByCategory", new {id = ViewBag.x})
 		@*	@RenderBody()*@
 		</div>
 	</div>

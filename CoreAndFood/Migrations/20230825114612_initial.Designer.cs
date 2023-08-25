@@ -2,68 +2,71 @@
 using CoreAndFood.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace CoreAndFood.Migrations
 {
-    [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CoreAndFoodContext))]
+    [Migration("20230825114612_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
             modelBuilder.Entity("CoreAndFood.Data.Models.Admin", b =>
                 {
-                    b.Property<int>("AdminId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AdminRole")
-                        .HasMaxLength(1)
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Password")
                         .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(1)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("AdminId");
+                    b.HasKey("Id");
 
                     b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("CoreAndFood.Data.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(20)
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("CoreAndFood.Data.Models.Food", b =>
+            modelBuilder.Entity("CoreAndFood.Data.Models.Product", b =>
                 {
-                    b.Property<int>("FoodId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -73,10 +76,10 @@ namespace CoreAndFood.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FoodName")
+                    b.Property<string>("ImageURL")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ImageURL")
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Price")
@@ -85,17 +88,17 @@ namespace CoreAndFood.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("FoodId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Foods");
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("CoreAndFood.Data.Models.Food", b =>
+            modelBuilder.Entity("CoreAndFood.Data.Models.Product", b =>
                 {
                     b.HasOne("CoreAndFood.Data.Models.Category", "Category")
-                        .WithMany("Foods")
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -105,7 +108,7 @@ namespace CoreAndFood.Migrations
 
             modelBuilder.Entity("CoreAndFood.Data.Models.Category", b =>
                 {
-                    b.Navigation("Foods");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

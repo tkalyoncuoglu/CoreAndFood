@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CoreAndFood.Data.Models.Food>
+﻿@model IEnumerable<CoreAndFood.Data.Models.Product>
+
 
 <div class="agile_top_brands_grids">
     @foreach (var item in Model)
@@ -11,7 +12,7 @@
                             <div class="snipcart-item block">
                                 <div class="snipcart-thumb">
                                     <a href="single.html"><img title=" " alt="" style="width:250px; height:150px" src="@item.ImageURL" /></a>
-                                    <p>@item.FoodName</p>
+                                    <p>@item.Name</p>
                                     <h4>@item.Price ₺ </h4><br /><h6>Stok: @item.Stock</h6>
                                 </div>
                                 <div class="snipcart-details top_brand_home_details">
@@ -28,7 +29,9 @@
                                             <input type="hidden" name="cancel_return" value=" " />
                                             <input type="submit" name="submit" value="Sepete ekle" class="button" />
                                         </fieldset>
+
                                     </form>
+
                                 </div>
                             </div>
                         </figure>

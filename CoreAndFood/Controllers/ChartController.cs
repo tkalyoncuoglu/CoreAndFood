@@ -1,34 +1,37 @@
 ﻿using CoreAndFood.Data.Models;
+using CoreAndFood.DTOs;
+using CoreAndFood.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 
 namespace CoreAndFood.Controllers
-{    
+{
     [AllowAnonymous]
 
     public class ChartController : Controller
     {
-        private List<Class1> class1s = new List<Class1>() {
-                                            new Class1(){
-                                                ProductName = "Computer",
-                                                    Stock = 150
-                                                },
-                                            new Class1()
-                                            {
-                                                ProductName = "Lcd",
-                                                    Stock = 75
-                                                },
-                                            new Class1()
-                                            {
-                                                ProductName = "Usb Disk",
-                                                    Stock = 220
-                                                }};
+        private ProductRepository _productRepository;
+
+        private CategoryRepository _categoryRepository;
+        public ChartController(ProductRepository productRepository, CategoryRepository categoryRepository) 
+        { 
+            _productRepository = productRepository;
+
+            _categoryRepository = categoryRepository;
+        }
+
         public IActionResult Index()
         {
+            var products = _productRepository.Get().Select(x =>
+            new ProductDto
+            {
+                Name = x.Name,
+                Stock = x.Stock,
+            }).ToList();
            
-            ViewData["data"] = JsonSerializer.Serialize(class1s);
+            ViewData["data"] = JsonSerializer.Serialize(products);
             ViewData["chartTitle"] = "Ürün - Stok Grafiği";
             ViewData["chartType"] = "PieChart";
 
@@ -38,7 +41,14 @@ namespace CoreAndFood.Controllers
   
         public IActionResult Index2()
         {
-            ViewData["data"] = JsonSerializer.Serialize(class1s);
+            var products = _productRepository.Get().Select(x =>
+            new ProductDto
+            {
+                Name = x.Name,
+                Stock = x.Stock,
+            }).ToList();
+
+            ViewData["data"] = JsonSerializer.Serialize(products);
             ViewData["chartTitle"] = "Ürün - Stok Grafiği";
             ViewData["chartType"] = "ColumnChart";
 
@@ -46,73 +56,51 @@ namespace CoreAndFood.Controllers
         }
 
         
-     
-        public IActionResult Index3()
-        {
-            return View();
-        }
-        public IActionResult VisualizeProductResult2()
-        {
-            return Json(FoodList());
-        }
-        public List<Class2> FoodList()
-        {
-            List<Class2> cs2 = new List<Class2>();
-            using (var c = new Context())
-            {
-                cs2 = c.Foods.Select(x => new Class2
-                {
-                    foodname = x.FoodName,
-                    stock = x.Stock
-                }).ToList();
-            }
-            return cs2;
-        }
 
         public IActionResult Statistics()
         {
-            Context c = new Context();
-            var deger1 = c.Foods.Count();
+            
+            var deger1 = _productRepository.Get().Count();
             ViewBag.d1 = deger1;
 
-            var deger2 = c.Categories.Count();
+            var deger2 = _categoryRepository.Get().Count();
             ViewBag.d2 = deger2;
 
-            var foid = c.Categories.Where(X => X.CategoryName == "Fruit").Select(y => y.CategoryId).FirstOrDefault();
-            ViewBag.d = foid;
+            var fruitCategory = _categoryRepository.Get(x => x.Name == "Fruit").FirstOrDefault();
+            var fruitCount = _productRepository.Get(x => x.CategoryId == (fruitCategory != null ? fruitCategory.Id : -1) ).Count();
+            ViewBag.d3 = fruitCount;
 
-            var deger3 = c.Foods.Where(x => x.CategoryId == foid).Count();
-            ViewBag.d3 = deger3;
+            var vegetableCategory = _categoryRepository.Get(x => x.Name == "Vegetables").FirstOrDefault();
+            var vegetableCount = _productRepository.Get(x => x.CategoryId == (vegetableCategory != null ? vegetableCategory.Id : -1)).Count();
+            ViewBag.d4 = vegetableCount;
 
-            var deger4 = c.Foods.Where(x => x.CategoryId == c.Categories.Where(z => z.CategoryName == "Vegetables").Select(y => y.CategoryId).FirstOrDefault()).Count();
-            ViewBag.d4 = deger4;
-
-            var deger5 = c.Foods.Sum(x => x.Stock);
-            ViewBag.d5 = deger5;
-
-            var deger6 = c.Foods.Where(x => x.CategoryId == c.Categories.Where(y => y.CategoryName == "Legumes").Select(z => z.CategoryId).FirstOrDefault()).Count();
+            var foodCategory = _categoryRepository.Get(x => x.Name == "Food").FirstOrDefault();
+            var foodSum = _productRepository.Get(x => x.CategoryId == (foodCategory != null ? foodCategory.Id : -1)).Sum(x => x.Stock);
+            ViewBag.d5 = foodSum;
+            /*
+            var deger6 = _context.Foods.Where(x => x.Id == _context.Categories.Where(y => y.Name == "Legumes").Select(z => z.Id).FirstOrDefault()).Count();
             ViewBag.d6 = deger6;
 
-            var deger7 = c.Foods.OrderByDescending(x=>x.Stock).Select(y=>y.FoodName).FirstOrDefault();
+            var deger7 = _context.Foods.OrderByDescending(x=>x.Stock).Select(y=>y.FoodName).FirstOrDefault();
             ViewBag.d7 = deger7;
 
-            var deger8 = c.Foods.OrderBy(x=>x.Stock).Select(z=>z.FoodName).FirstOrDefault();
+            var deger8 = _context.Foods.OrderBy(x=>x.Stock).Select(z=>z.FoodName).FirstOrDefault();
             ViewBag.d8 = deger8;
-
-            var deger9 = c.Foods.Average(x => x.Price).ToString("0.00");
+            
+            var deger9 = _context.Foods.Average(x => x.Price).ToString("0.00");
             ViewBag.d9 = deger9;    
 
-            var deger10 = c.Categories.Where(x=>x.CategoryName=="Fruit").Select(y=>y.CategoryId).FirstOrDefault();
-            var deger10p = c.Foods.Where(y => y.CategoryId == deger10).Sum(x => x.Stock);
+            var deger10 = _context.Categories.Where(x=>x.Name=="Fruit").Select(y=>y.Id).FirstOrDefault();
+            var deger10p = _context.Foods.Where(y => y.Id == deger10).Sum(x => x.Stock);
             ViewBag.d10 = deger10p;
 
-            var deger11 = c.Categories.Where(x => x.CategoryName == "Vegetables").Select(y => y.CategoryId).FirstOrDefault();
-            var deger11p = c.Foods.Where(y => y.CategoryId == deger11).Sum(x => x.Stock);
+            var deger11 = _context.Categories.Where(x => x.Name == "Vegetables").Select(y => y.Id).FirstOrDefault();
+            var deger11p = _context.Foods.Where(y => y.Id == deger11).Sum(x => x.Stock);
             ViewBag.d11 = deger11p;
 
-            var deger12 = c.Foods.OrderByDescending(x => x.Price).Select(y => y.FoodName).FirstOrDefault();
+            var deger12 = _context.Foods.OrderByDescending(x => x.Price).Select(y => y.FoodName).FirstOrDefault();
             ViewBag.d12 = deger12;
-
+            */
             return View();
         }
     }

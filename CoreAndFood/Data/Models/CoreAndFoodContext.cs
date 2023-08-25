@@ -2,7 +2,7 @@
 
 namespace CoreAndFood.Data.Models
 {
-    public class Context : DbContext
+    public class CoreAndFoodContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -13,7 +13,7 @@ namespace CoreAndFood.Data.Models
 
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Food> Foods { get; set; }  
+        public DbSet<Product> Products { get; set; }  
 
         public DbSet<Admin> Admins { get; set; }
     }

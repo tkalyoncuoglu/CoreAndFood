@@ -9,7 +9,7 @@ namespace CoreAndFood.Controllers
 {
     public class LoginController : Controller
     {
-        Context c = new Context();  
+        CoreAndFoodContext c = new CoreAndFoodContext();  
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()

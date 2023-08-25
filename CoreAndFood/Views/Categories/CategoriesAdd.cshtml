@@ -8,9 +8,9 @@
 <br />
 @using (Html.BeginForm("CategoriesAdd", "Categories", FormMethod.Post))
 {
-    @Html.LabelFor(x=>x.CategoryName)
-    @Html.TextBoxFor(x=>x.CategoryName, new { @class = "form-control" })
-    @Html.ValidationMessageFor(x=>x.CategoryName,"",new { @style = "color: red" });
+    @Html.LabelFor(x=>x.Name)
+    @Html.TextBoxFor(x=>x.Name, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x=>x.Name,"",new { @style = "color: red" });
     <br />
     @Html.LabelFor(x=>x.Description)
     @Html.TextBoxFor(x=>x.Description, new { @class = "form-control" })

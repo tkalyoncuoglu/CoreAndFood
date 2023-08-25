@@ -5,10 +5,15 @@ namespace CoreAndFood.ViewComponents
 {
 	public class CategoryGetList : ViewComponent
 	{
+		private CategoryRepository _categoryRepository;
+
+		public CategoryGetList(CategoryRepository categoryRepository)
+		{
+			_categoryRepository = categoryRepository;
+		}
 		public IViewComponentResult Invoke()
 		{
-			CategoryRepository categoryRepository = new CategoryRepository();
-			var categorylist = categoryRepository.TList();
+			var categorylist = _categoryRepository.Get();
 			return View(categorylist);	
 		}
 	}

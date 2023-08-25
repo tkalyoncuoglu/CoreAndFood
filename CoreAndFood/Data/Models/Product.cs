@@ -2,12 +2,12 @@
 
 namespace CoreAndFood.Data.Models
 {
-    public class Food
+    public class Product
     {
         [Key]
-        public int FoodId { get; set; }
+        public int Id { get; set; }
 
-        public string FoodName { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
 

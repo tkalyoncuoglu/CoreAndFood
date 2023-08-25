@@ -1,4 +1,5 @@
 ﻿using CoreAndFood.Data.Models;
+using CoreAndFood.DTOs;
 using CoreAndFood.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,76 +7,83 @@ using X.PagedList;
 
 namespace CoreAndFood.Controllers
 {
-    public class FoodController : Controller
+    public class ProductController : Controller
     {
-        Context c = new Context(); 
+        private ProductRepository _productRepository;
 
-        FoodRepository foodRepository = new FoodRepository(); 
+        private CategoryRepository _categoryRepository;
+
+        public ProductController(ProductRepository productRepository, CategoryRepository categoryRepository)
+        {
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;   
+        }
 
         public IActionResult Index(int page=1)
         {  
-            return View(foodRepository.TList("Category").ToPagedList(page, 3));
+            return View(_productRepository.Get("Category").ToPagedList(page, 3));
         }
 
         [HttpGet]
-        public IActionResult AddFood()
+        public IActionResult Add()
         {
-            List<SelectListItem> values = (from x in c.Categories.ToList()
+            List<SelectListItem> values = (from x in _categoryRepository.Get()
                                            select new SelectListItem
                                            {
-                                                Text = x.CategoryName,
-                                                Value = x.CategoryId.ToString(),
+                                                Text = x.Name,
+                                                Value = x.Id.ToString(),
                                            }).ToList();
             ViewBag.v1 = values;
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddFood(urunekle p)
+        public IActionResult Add(urunekle p)
         {
-            Food f = new Food();
+            Product f = new Product();
             if(p != null)
             {
                 var extension = Path.GetExtension(p.ImageURL.FileName);
                 var newimagename = Guid.NewGuid() + extension;  
                 var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/resimler", newimagename);
+
                 var stream = new FileStream(location, FileMode.Create);
                 p.ImageURL.CopyTo(stream);
-                f.ImageURL = newimagename;
+                f.ImageURL = "/resimler/" + newimagename;
             }
-            f.FoodName= p.FoodName;
+            f.Name= p.Name;
             f.Price = p.Price;
             f.Stock = p.Stock;
             f.CategoryId = p.CategoryId;
             f.Description = p.Description;
-            foodRepository.TAdd(f);
+            _productRepository.Add(f);
             return RedirectToAction("Index");
         }
 
-        public IActionResult DeleteFood(int id)
+        public IActionResult Delete(int id)
         {
           
-            foodRepository.TDelete(new Food { FoodId = id });
+            _productRepository.Delete(new Product { Id = id });
             return RedirectToAction("Index");   
         }
 
-        public IActionResult FoodGet(int id)
+        public IActionResult Get(int id)
         {
-            var values = foodRepository.TGetList(id);
+            var values = _productRepository.Get(id);
 
-            List<SelectListItem> value = (from y in c.Categories.ToList()
+            List<SelectListItem> value = (from y in _categoryRepository.Get()
                                            select new SelectListItem
                                            {
-                                               Text = y.CategoryName,
-                                               Value = y.CategoryId.ToString(),
+                                               Text = y.Name,
+                                               Value = y.Id.ToString(),
                                            }).ToList();
             ViewBag.v1 = value;
 
-            Food food = new Food()
+            Product food = new Product()
             {
-                FoodId = values.FoodId,
+                Id = values.Id,
                 CategoryId = values.CategoryId,
-                FoodName = values.FoodName, 
+                Name = values.Name, 
                 Price = values.Price,   
                 Stock = values.Stock,
                 Description = values.Description,
@@ -85,17 +93,17 @@ namespace CoreAndFood.Controllers
             return View(food);
         }
         [HttpPost]
-        public IActionResult FoodUpdate(Food p)
+        public IActionResult Update(Product p)
         {
-            var values = foodRepository.TGetList(p.FoodId);
-            values.FoodName = p.FoodName;
+            var values = _productRepository.Get(p.Id);
+            values.Name = p.Name;
             values.Stock    = p.Stock;
             values.Price    = p.Price;
             values.ImageURL = p.ImageURL;
             values.Description = p.Description;
-            values.CategoryId = p.CategoryId;
+            values.Id = p.Id;
 
-            foodRepository.TUpdate(values);
+            _productRepository.Update(values);
             return RedirectToAction("Index");  
         }
     }

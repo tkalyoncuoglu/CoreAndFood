@@ -5,7 +5,7 @@ namespace CoreAndFood.Data.Models
     public class Admin
     {
         [Key]
-        public int AdminId { get; set; }
+        public int Id { get; set; }
 
         [StringLength(20)]
         public string UserName { get; set; }
@@ -14,6 +14,6 @@ namespace CoreAndFood.Data.Models
         public string Password { get; set; }
 
         [StringLength(1)]
-        public string AdminRole { get; set; }
+        public string Role { get; set; }
     }
 }

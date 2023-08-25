@@ -7,16 +7,21 @@ namespace CoreAndFood.Controllers
 {
     public class CategoriesController : Controller
     {
-        CategoryRepository categoryrepository = new CategoryRepository();
+        private CategoryRepository _categoryRepository;
         //[Authorize]
+
+        public CategoriesController(CategoryRepository categoryRepository)
+        {
+            _categoryRepository = categoryRepository;
+        }
        
         public IActionResult Index(string p)
         {
             if (!string.IsNullOrEmpty(p))
             {
-                return View(categoryrepository.List(x=>x.CategoryName == p));
+                return View(_categoryRepository.Get(x=>x.Name == p));
             }
-           return View(categoryrepository.TList());
+           return View(_categoryRepository.Get());
         }
 
         [HttpGet]
@@ -32,18 +37,18 @@ namespace CoreAndFood.Controllers
             {
                 return View("CategoriesAdd");
             }
-            categoryrepository.TAdd(p);
+            _categoryRepository.Add(p);
             return RedirectToAction("Index");
         }
 
         public IActionResult CategoriesGet(int id)
         {
-            var values = categoryrepository.TGetList(id);
+            var values = _categoryRepository.Get(id);
             Category category = new Category()
             {
-                CategoryName = values.CategoryName,
+                Name = values.Name,
                 Description = values.Description,   
-                CategoryId = values.CategoryId      
+                Id = values.Id      
             };
             return View(category);
         }
@@ -51,19 +56,19 @@ namespace CoreAndFood.Controllers
         [HttpPost]
         public IActionResult CategoriesUpdate(Category p)
         {
-            var x = categoryrepository.TGetList(p.CategoryId);
-            x.CategoryName = p.CategoryName;
+            var x = _categoryRepository.Get(p.Id);
+            x.Name = p.Name;
             x.Description = p.Description;
             x.Status = true;
-            categoryrepository.TUpdate(x);
+            _categoryRepository.Update(x);
             return RedirectToAction("Index");
         }
 
         public IActionResult CategoriesDelete(int id)
         {
-            var x = categoryrepository.TGetList(id);
+            var x = _categoryRepository.Get(id);
             x.Status = false;
-            categoryrepository.TUpdate(x);
+            _categoryRepository.Update(x);
 
             return RedirectToAction("Index");
         }
