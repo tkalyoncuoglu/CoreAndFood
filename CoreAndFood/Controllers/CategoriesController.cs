@@ -7,10 +7,10 @@ namespace CoreAndFood.Controllers
 {
     public class CategoriesController : Controller
     {
-        private CategoryRepository _categoryRepository;
+        private ICategoryRepository _categoryRepository;
         //[Authorize]
 
-        public CategoriesController(CategoryRepository categoryRepository)
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

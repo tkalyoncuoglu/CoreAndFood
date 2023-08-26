@@ -27,8 +27,8 @@ var policy = new AuthorizationPolicyBuilder()
 });
 
 builder.Services.AddScoped<CoreAndFoodContext>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 

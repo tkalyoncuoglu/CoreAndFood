@@ -12,10 +12,10 @@ namespace CoreAndFood.Controllers
 
     public class ChartController : Controller
     {
-        private ProductRepository _productRepository;
+        private IProductRepository _productRepository;
 
-        private CategoryRepository _categoryRepository;
-        public ChartController(ProductRepository productRepository, CategoryRepository categoryRepository) 
+        private ICategoryRepository _categoryRepository;
+        public ChartController(IProductRepository productRepository, ICategoryRepository categoryRepository) 
         { 
             _productRepository = productRepository;
 

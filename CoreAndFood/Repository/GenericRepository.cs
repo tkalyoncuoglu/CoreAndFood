@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace CoreAndFood.Repository
 {
-    public class GenericRepository<T> where T : class, new()
+    public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
     {
         private CoreAndFoodContext _context;
 
@@ -12,7 +12,7 @@ namespace CoreAndFood.Repository
         {
             _context = context;
         }
-  
+
 
         public List<T> Get()
         {
@@ -39,7 +39,7 @@ namespace CoreAndFood.Repository
 
         public T Get(int id)
         {
-           return _context.Set<T>().Find(id);
+            return _context.Set<T>().Find(id);
         }
 
         public List<T> Get(string p)

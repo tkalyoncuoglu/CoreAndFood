@@ -5,9 +5,9 @@ namespace CoreAndFood.ViewComponents
 {
 	public class CategoryGetList : ViewComponent
 	{
-		private CategoryRepository _categoryRepository;
+		private ICategoryRepository _categoryRepository;
 
-		public CategoryGetList(CategoryRepository categoryRepository)
+		public CategoryGetList(ICategoryRepository categoryRepository)
 		{
 			_categoryRepository = categoryRepository;
 		}

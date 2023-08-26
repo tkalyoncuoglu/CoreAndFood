@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace CoreAndFood.Repository
 {
-    public class CategoryRepository : GenericRepository<Category>
+    public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
     {
         public CategoryRepository(CoreAndFoodContext context) : base(context) { }
         internal object TDelete(int id)

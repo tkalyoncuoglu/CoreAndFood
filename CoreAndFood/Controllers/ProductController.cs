@@ -9,11 +9,11 @@ namespace CoreAndFood.Controllers
 {
     public class ProductController : Controller
     {
-        private ProductRepository _productRepository;
+        private IProductRepository _productRepository;
 
-        private CategoryRepository _categoryRepository;
+        private ICategoryRepository _categoryRepository;
 
-        public ProductController(ProductRepository productRepository, CategoryRepository categoryRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;   

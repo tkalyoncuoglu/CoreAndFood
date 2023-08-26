@@ -5,9 +5,9 @@ namespace CoreAndFood.ViewComponents
 {
 	public class ProductListByCategory : ViewComponent
 	{
-		private ProductRepository _productRepository;
+		private IProductRepository _productRepository;
 
-		public ProductListByCategory(ProductRepository productRepository)
+		public ProductListByCategory(IProductRepository productRepository)
 		{
 			_productRepository = productRepository;
 		}
