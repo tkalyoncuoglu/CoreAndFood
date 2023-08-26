@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace CoreAndFood.Controllers
 {
-    [AllowAnonymous]
+    
 
     public class ChartController : Controller
     {
